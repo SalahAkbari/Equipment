@@ -85,11 +85,11 @@ namespace EquipmentRental
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Equipment Rental API V1");
-                c.RoutePrefix = string.Empty;
-            });
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Equipment Rental API V1");
+            //    c.RoutePrefix = string.Empty;
+            //});
 
             app.UseMvc(routes =>
             {
@@ -127,7 +127,7 @@ namespace EquipmentRental
                 // Create the Db if it doesn't exist and applies any pending migration.
                 //dbContext.Database.Migrate();
                 // Seed the Db.
-                DbSeeder.Seed(dbContext, roleManager, userManager);
+                //DbSeeder.Seed(dbContext, roleManager, userManager);
             }
         }
     }

@@ -59,6 +59,7 @@ namespace CustomerInquiry.Provider
             {
                 transaction.Points = Helper.CalculatePoints(transaction.Type);
                 transaction.Price = Helper.CalculatePrice(transaction.Days, transaction.Type);
+                transaction.TransactionDateTime = DateTime.Now.ToString();
                 var itemToCreate = Mapper.Map<Transaction>(transaction);
                 itemToCreate.UserId = customerId;
                 _rep.Add(itemToCreate);
