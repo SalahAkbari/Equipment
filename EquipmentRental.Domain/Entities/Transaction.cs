@@ -9,15 +9,20 @@ namespace EquipmentRental.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionID { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{dd/MM/yyyy HH:mm}")]
         public DateTime TransactionDateTime { get; set; }
+
         [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid price")]
         public decimal Invoice { get; set; }
+
         public int Days { get; set; }
 
-        [ForeignKey("CustomerId")]
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        [ForeignKey("UserId")]
+        public virtual Customer User { get; set; }
     }
 }

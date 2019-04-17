@@ -16,7 +16,7 @@ namespace EquipmentRental.DataAccess
             // Create default Users (if there are none)
             if (!dbContext.Users.Any())
                 CreateCustomers(dbContext, roleManager, userManager).GetAwaiter().GetResult();
-            // Create default Quizzes (if there are none) together with their
+            // create Inventory with auto-generated static data
             if (!dbContext.Inventories.Any()) FillInventory(dbContext);
         }
 

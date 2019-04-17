@@ -1,6 +1,9 @@
+using EquipmentRental.DataAccess;
 using EquipmentRental.DataAccess.DbContext;
+using EquipmentRental.Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +30,16 @@ namespace EquipmentRental
 
             var conn = Configuration["connectionStrings:sqlConnection"];
             services.AddDbContext<SqlDbContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
-
+            services.AddIdentity<Customer, IdentityRole>(
+                   opts =>
+                   {
+                       opts.Password.RequireDigit = true;
+                       opts.Password.RequireLowercase = true;
+                       opts.Password.RequireUppercase = true;
+                       opts.Password.RequireNonAlphanumeric = false;
+                       opts.Password.RequiredLength = 7;
+                   })
+               .AddEntityFrameworkStores<SqlDbContext>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -83,6 +95,25 @@ namespace EquipmentRental
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+
+            using (var serviceScope =
+                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>
+                    ().CreateScope())
+            {
+                var dbContext =
+                    serviceScope.ServiceProvider.GetService<SqlDbContext>();
+                var roleManager =
+                    serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>
+                        ();
+                var userManager =
+                    serviceScope.ServiceProvider.GetService<UserManager<Customer>>
+                        ();
+                // Create the Db if it doesn't exist and applies any pending migration.
+                //dbContext.Database.Migrate();
+                // Seed the Db.
+                DbSeeder.Seed(dbContext, roleManager, userManager);
+            }
         }
     }
 }
