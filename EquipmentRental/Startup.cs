@@ -1,6 +1,8 @@
 using EquipmentRental.DataAccess;
 using EquipmentRental.DataAccess.DbContext;
+using EquipmentRental.Domain.DTOs;
 using EquipmentRental.Domain.Entities;
+using EquipmentRental.Provider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -46,6 +48,15 @@ namespace EquipmentRental
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            services.AddScoped(typeof(IInventoryProvider), typeof(InventoryProvider));
+            services.AddScoped(typeof(IGenericEfRepository<>), typeof(GenericEfRepository<>));
+
+            AutoMapper.Mapper.Initialize(config =>
+            {
+                config.CreateMap<Inventory, InventoryDto>();
+                config.CreateMap<InventoryDto, Inventory>();
+            });
+
             // Register the Swagger generator
             services.AddSwaggerGen(c =>
             {
@@ -70,11 +81,11 @@ namespace EquipmentRental
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Equipment Rental API V1");
-                c.RoutePrefix = string.Empty;
-            });
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Equipment Rental API V1");
+            //    c.RoutePrefix = string.Empty;
+            //});
 
             app.UseMvc(routes =>
             {
