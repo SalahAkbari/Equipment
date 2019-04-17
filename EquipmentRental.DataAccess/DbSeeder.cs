@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EquipmentRental.DataAccess.DbContext;
 using EquipmentRental.Domain.Entities;
+using EquipmentRental.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace EquipmentRental.DataAccess
@@ -18,6 +20,8 @@ namespace EquipmentRental.DataAccess
                 CreateCustomers(dbContext, roleManager, userManager).GetAwaiter().GetResult();
             // create Inventory with auto-generated static data
             if (!dbContext.Inventories.Any()) FillInventory(dbContext);
+
+            if (!dbContext.Transactions.Any()) AddSomeTransactions(dbContext);
         }
 
         #endregion
@@ -128,7 +132,7 @@ namespace EquipmentRental.DataAccess
         {
 #if DEBUG
             // create Inventory with auto-generated static data
-                
+
             dbContext.Inventories.Add(new Inventory
             {
                 Name = "Caterpillar bulldozer",
@@ -164,7 +168,89 @@ namespace EquipmentRental.DataAccess
         }
 #endif
 
+        private static void AddSomeTransactions(SqlDbContext dbContext)
+        {
+#if DEBUG
+            var Inventories = dbContext.Inventories.ToList();
+
+            dbContext.Transactions.Add(new Transaction
+            {
+                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                EquipmentId = 1,
+                TransactionDateTime = DateTime.Now,
+                Days = 1,
+                Price = CalculatePrice(1, Inventories.FirstOrDefault(c => c.InventoryID.Equals(1)).Type),
+                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(1)).Type)
+            });
+
+            dbContext.Transactions.Add(new Transaction
+            {
+                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                EquipmentId = 2,
+                TransactionDateTime = DateTime.Now,
+                Days = 2,
+                Price = CalculatePrice(2, Inventories.FirstOrDefault(c => c.InventoryID.Equals(2)).Type),
+                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(2)).Type)
+            });
+
+            dbContext.Transactions.Add(new Transaction
+            {
+                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                EquipmentId = 3,
+                TransactionDateTime = DateTime.Now,
+                Days = 3,
+                Price = CalculatePrice(3, Inventories.FirstOrDefault(c => c.InventoryID.Equals(3)).Type),
+                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(3)).Type)
+            });
+
+            dbContext.Transactions.Add(new Transaction
+            {
+                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                EquipmentId = 4,
+                TransactionDateTime = DateTime.Now,
+                Days = 4,
+                Price = CalculatePrice(4, Inventories.FirstOrDefault(c => c.InventoryID.Equals(4)).Type),
+                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(4)).Type)
+            });
+
+            dbContext.Transactions.Add(new Transaction
+            {
+                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                EquipmentId = 5,
+                TransactionDateTime = DateTime.Now,
+                Days = 5,
+                Price = CalculatePrice(5, Inventories.FirstOrDefault(c => c.InventoryID.Equals(5)).Type),
+                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(5)).Type)
+            });
+
+            // persist the changes on the Database
+            dbContext.SaveChanges();
+        }
+#endif
+
         #endregion
 
+        public static decimal CalculatePrice(int days,  EquipmentType equipmentType)
+        {
+            Dictionary<int, decimal> dictionary = new Dictionary<int, decimal>()
+            {
+                {1, days * (Fee.Fees["One-Time"] + Fee.Fees["Premium"])},
+                {2, days > 2 ?  ((days - 2) * Fee.Fees["Regular"]) + (Fee.Fees["One-Time"] + Fee.Fees["Premium"])
+                                         : ( Fee.Fees["One-Time"] + Fee.Fees["Premium"])},
+                {3,  days > 3 ?  ((days - 3) * Fee.Fees["Regular"]) + Fee.Fees["Premium"]
+                                         : Fee.Fees["Premium"]},
+
+            };
+
+            decimal value;
+            dictionary.TryGetValue((int)equipmentType, out value);
+
+            return value;
+        }
+
+        public static int CalculatePoints(EquipmentType equipmentType)
+        {
+            return (int)equipmentType == 1 ? 2 : 1;
+        }
     }
 }

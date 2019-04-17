@@ -4,14 +4,16 @@ using EquipmentRental.DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EquipmentRental.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    partial class SqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190417093946_TransactionChanged")]
+    partial class TransactionChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +109,7 @@ namespace EquipmentRental.Migrations
 
                     b.Property<int>("EquipmentId");
 
-                    b.Property<int>("Points");
-
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Invoice");
 
                     b.Property<DateTime>("TransactionDateTime");
 
