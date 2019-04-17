@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRental.DataAccess"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRental.Provider", "EquipmentRental.Provider\EquipmentRental.Provider.csproj", "{642834F0-FBC8-4BFE-9F06-F818C7E1EEEE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRental.Test", "EquipmentRental.Test\EquipmentRental.Test.csproj", "{4D1A56D8-FADA-4075-88FC-136AD69943AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{642834F0-FBC8-4BFE-9F06-F818C7E1EEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{642834F0-FBC8-4BFE-9F06-F818C7E1EEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{642834F0-FBC8-4BFE-9F06-F818C7E1EEEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D1A56D8-FADA-4075-88FC-136AD69943AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D1A56D8-FADA-4075-88FC-136AD69943AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D1A56D8-FADA-4075-88FC-136AD69943AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D1A56D8-FADA-4075-88FC-136AD69943AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

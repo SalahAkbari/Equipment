@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CustomerInquiry.Controllers
+namespace EquipmentRental.Controllers
 {
     [Route("api/inventories")]
     public class InventoryController : Controller
