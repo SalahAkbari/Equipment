@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EquipmentRental.DataAccess\EquipmentRental.DataAccess.csproj" />
     <ProjectReference Include="..\EquipmentRental.Domain\EquipmentRental.Domain.csproj" />
+    <ProjectReference Include="..\EquipmentRental.Provider\EquipmentRental.Provider.csproj" />
     <ProjectReference Include="..\EquipmentRental\EquipmentRental.csproj" />
   </ItemGroup>
 

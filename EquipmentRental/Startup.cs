@@ -1,3 +1,4 @@
+using CustomerInquiry.Provider;
 using EquipmentRental.DataAccess;
 using EquipmentRental.DataAccess.DbContext;
 using EquipmentRental.Domain.DTOs;
@@ -49,12 +50,15 @@ namespace EquipmentRental
             });
 
             services.AddScoped(typeof(IInventoryProvider), typeof(InventoryProvider));
+            services.AddScoped(typeof(ITransactionProvider), typeof(TransactionProvider));
             services.AddScoped(typeof(IGenericEfRepository<>), typeof(GenericEfRepository<>));
 
             AutoMapper.Mapper.Initialize(config =>
             {
                 config.CreateMap<Inventory, InventoryDto>();
                 config.CreateMap<InventoryDto, Inventory>();
+                config.CreateMap<Transaction, TransactionDTo>();
+                config.CreateMap<TransactionDTo, Transaction>();
             });
 
             // Register the Swagger generator
@@ -81,11 +85,11 @@ namespace EquipmentRental
 
             app.UseSwagger();
 
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Equipment Rental API V1");
-            //    c.RoutePrefix = string.Empty;
-            //});
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Equipment Rental API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseMvc(routes =>
             {

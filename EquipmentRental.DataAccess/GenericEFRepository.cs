@@ -17,5 +17,21 @@ namespace EquipmentRental.DataAccess
         {
             return await Task.FromResult(_db.Set<TEntity>());
         }
+
+        public async Task<TEntity> Get(int id)
+        {
+            var entity = await Task.FromResult(_db.Set<TEntity>().Find(id));
+            return entity;
+        }
+
+        public bool Save()
+        {
+            return _db.SaveChanges() >= 0;
+        }
+
+        public void Add(TEntity item)
+        {
+            _db.Add(item);
+        }
     }
 }
