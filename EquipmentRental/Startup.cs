@@ -1,10 +1,13 @@
+using EquipmentRental.DataAccess.DbContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace EquipmentRental
 {
@@ -21,6 +24,9 @@ namespace EquipmentRental
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var conn = Configuration["connectionStrings:sqlConnection"];
+            services.AddDbContext<SqlDbContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
