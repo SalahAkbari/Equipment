@@ -56,8 +56,6 @@ export class EquipmentsComponent {
   onSelect(inventory: IInventory) {
     this.transaction.equipmentId = inventory.inventoryID;
     this.transaction.type = inventory.type;
-
-    alert('You choosed one item, please Enter the number of days below');
   }
 
   // retrieve a FormControl

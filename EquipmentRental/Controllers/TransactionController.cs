@@ -51,12 +51,15 @@ namespace EquipmentRental.Controllers
         }
 
         [HttpPost("saveInvoice")]
-        public IActionResult Post([FromBody]Invoice invoice)
+        public async Task<IActionResult> Post([FromBody]Invoice invoice)
         {
             if (invoice == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
             invoice.SaveToTxt();
-            return Ok(invoice);
+            var item = await _transactionProvider.DeleteTransactions();
+            if (item == null)
+                return StatusCode(500, "A problem occurred while handling your request.");
+            return NoContent();
         }
     }
 }

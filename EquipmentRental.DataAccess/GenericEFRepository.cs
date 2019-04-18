@@ -33,5 +33,10 @@ namespace EquipmentRental.DataAccess
         {
             _db.Add(item);
         }
+
+        public void Delete(TEntity item)
+        {
+            _db.Set<TEntity>().Remove(item);
+        }
     }
 }

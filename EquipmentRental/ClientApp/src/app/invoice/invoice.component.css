@@ -9,3 +9,8 @@ h1.center{
 p.left {
   margin: 10px;
 }
+
+p.right {
+  margin: 10px;
+  text-align: right;
+}

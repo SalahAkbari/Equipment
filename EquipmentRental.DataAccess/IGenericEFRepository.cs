@@ -9,5 +9,6 @@ namespace EquipmentRental.DataAccess
         Task<TEntity> Get(int id);
         bool Save();
         void Add(TEntity item);
+        void Delete(TEntity item);
     }
 }

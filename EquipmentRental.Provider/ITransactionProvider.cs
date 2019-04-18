@@ -9,5 +9,6 @@ namespace EquipmentRental.Provider
         Task<Invoice> GetAllTransactions(string customerId, IInventoryProvider inventoryProvider);
         Task<TransactionDTo> GetTransaction(string customerId, int id);
         TransactionDTo AddTransaction(string customerId, TransactionDTo transaction);
+        Task<bool?> DeleteTransactions();
     }
 }

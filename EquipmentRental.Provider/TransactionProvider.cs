@@ -103,5 +103,24 @@ namespace CustomerInquiry.Provider
                 throw e;
             }
         }
+
+        public async Task<bool?> DeleteTransactions()
+        {
+            try
+            {
+                var transactions = await _rep.Get();
+                foreach (var transaction in transactions)
+                {
+                    _rep.Delete(transaction);
+                }
+                if (!_rep.Save()) return null;
+                return true;
+            }
+            catch (Exception e)
+            {
+                //Logger.ErrorException(e.Message, e);
+                throw;
+            }
+        }
     }
 }

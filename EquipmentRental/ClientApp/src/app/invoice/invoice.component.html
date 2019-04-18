@@ -1,33 +1,47 @@
 <h1 class="center">Invoice</h1>
 
-<div class="double">
-  <p class="left">Customer Name: {{invoice.customerName}}</p>
-  <p class="left">Total Points: {{invoice.totalPoints}}</p>
-  <p class="left">Total Price: {{invoice.totalPrice}}</p>
-  <button type="submit" (click)="onSave()" class="btn btn-md btn-success btn-signin">
-    Save To a Text File
-  </button>
+<div *ngIf="invoice.transactions?.length == 0">
+  There is no item in your cart. Please add some items to your cart in the 
+  <a [routerLink]="['/equipments']">
+    Equipments page.
+  </a>
 </div>
 
-<br />
+<div *ngIf="invoice && invoice.transactions?.length > 0">
 
-<table class='table' *ngIf="invoice">
-  <thead>
-    <tr>
-      <th>EquipmentName</th>
-      <th>Type</th>
-      <th>Days</th>
-      <th>Points</th>
-      <th>Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let transaction of invoice.transactions">
-      <td>{{ transaction.equipmentName }}</td>
-      <td>{{ transaction.type }}</td>
-      <td>{{ transaction.days }}</td>
-      <td>{{ transaction.points }}</td>
-      <td>{{ transaction.price }}</td>
-    </tr>
-  </tbody>
-</table>
+  <div class="double">
+    <p class="left">Customer Name: {{invoice.customerName}}</p>
+    <p class="left">Total Points: {{invoice.totalPoints}}</p>
+    <p class="left">Total Price: {{invoice.totalPrice}}</p>
+    <p class="right">
+      <button type="submit" (click)="onSave()"
+              [disabled]="invoice.transactions?.length == 0" class="btn btn-md btn-success btn-signin">
+        Save To a Text File
+      </button>
+    </p>
+  </div>
+
+  <br />
+
+  <table class='table' *ngIf="invoice && invoice.transactions?.length > 0">
+    <thead>
+      <tr>
+        <th>EquipmentName</th>
+        <th>Type</th>
+        <th>Days</th>
+        <th>Points</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let transaction of invoice.transactions">
+        <td>{{ transaction.equipmentName }}</td>
+        <td>{{ transaction.type }}</td>
+        <td>{{ transaction.days }}</td>
+        <td>{{ transaction.points }}</td>
+        <td>{{ transaction.price }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
