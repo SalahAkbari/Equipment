@@ -7,19 +7,18 @@ using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.DTOs;
 using EquipmentRental.Domain.Entities;
 using EquipmentRental.Domain.Enums;
-using EquipmentRental.Provider;
 using EquipmentRental.Provider.Utilities;
 using EquipmentRental.Provider.ViewModels;
 using Microsoft.Extensions.Logging;
 
-namespace CustomerInquiry.Provider
+namespace EquipmentRental.Provider
 {
     public class TransactionProvider : ITransactionProvider
     {
         private readonly ILogger<TransactionProvider> _logger;
 
         readonly IGenericEfRepository<Transaction> _rep;
-        IInventoryProvider _inventoryProvider;
+        readonly IInventoryProvider _inventoryProvider;
 
         public TransactionProvider(IGenericEfRepository<Transaction> rep, ILogger<TransactionProvider> logger, IInventoryProvider inventoryProvider)
         {
@@ -34,7 +33,7 @@ namespace CustomerInquiry.Provider
             {
                 var item = (await _rep.Get()).Where(b => b.UserId.Equals(customerId));
                 var inventories = await _inventoryProvider.GetAllInventories();
-                var dtOs = Mapper.Map<IEnumerable<TransactionDTo>>(item);
+                var dtOs = Mapper.Map<IEnumerable<TransactionDTo>>(item).ToList();
 
                 var result = from transaction in dtOs
                              join inventory in inventories on transaction.EquipmentId equals inventory.InventoryID
@@ -55,7 +54,7 @@ namespace CustomerInquiry.Provider
                 //var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 //var customer = await _appDbContext.Users.SingleOrDefaultAsync(c => c.Id == userId);
 
-                Invoice invoice = new Invoice
+                var invoice = new Invoice
                 {
                     Transactions = result,
                     TotalPoints = dtOs.Sum(c => c.Points),
@@ -66,7 +65,7 @@ namespace CustomerInquiry.Provider
             catch (Exception e)
             {
                 _logger.LogInformation(e.Message);
-                throw e;
+                throw;
             }
         }
 
@@ -106,7 +105,7 @@ namespace CustomerInquiry.Provider
             catch (Exception e)
             {
                 _logger.LogInformation(e.Message);
-                throw e;
+                throw;
             }
         }
 

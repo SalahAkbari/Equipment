@@ -32,7 +32,7 @@ namespace EquipmentRental.Provider
             catch (Exception e)
             {
                 _logger.LogInformation(e.Message);
-                throw e;
+                throw;
             }
         }
     }

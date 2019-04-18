@@ -131,8 +131,8 @@ namespace EquipmentRental.Test
             var item = okResult?.Value as Invoice;
 
             // Assert
-            Assert.Equal(7, item.TotalPoints);
-            Assert.Equal(1180, item.TotalPrice);
+            Assert.Equal(7, item?.TotalPoints);
+            Assert.Equal(1180, item?.TotalPrice);
         }
 
         [Fact]

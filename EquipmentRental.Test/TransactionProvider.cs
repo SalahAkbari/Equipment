@@ -29,8 +29,7 @@ namespace EquipmentRental.Test
                 transaction.TransactionDateTime = DateTime.Now.ToString();
                 transaction.UserId = customerId;
                 _rep.Add(transaction);
-                if (!_rep.Save()) return null;
-                return transaction;
+                return !_rep.Save() ? null : transaction;
             }
             catch (Exception e)
             {
@@ -43,8 +42,8 @@ namespace EquipmentRental.Test
         {
             try
             {
-                var items = (await _rep.Get()).Where(b => b.UserId.Equals(customerId));
-                Invoice invoice = new Invoice
+                var items = (await _rep.Get()).Where(b => b.UserId.Equals(customerId)).ToList();
+                var invoice = new Invoice
                 {
                     Transactions = items,
                     TotalPoints = items.Sum(c => c.Points),

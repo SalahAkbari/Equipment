@@ -1,4 +1,3 @@
-using CustomerInquiry.Provider;
 using EquipmentRental.DataAccess;
 using EquipmentRental.DataAccess.DbContext;
 using EquipmentRental.Domain.DTOs;
@@ -127,7 +126,7 @@ namespace EquipmentRental
                 // Create the Db if it doesn't exist and applies any pending migration.
                 //dbContext.Database.Migrate();
                 // Seed the Db.
-                //DbSeeder.Seed(dbContext, roleManager, userManager);
+                DbSeeder.Seed(dbContext, roleManager, userManager);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using EquipmentRental.Provider;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace EquipmentRental.Controllers

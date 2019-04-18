@@ -21,7 +21,8 @@ namespace EquipmentRental.DataAccess
             // create Inventory with auto-generated static data
             if (!dbContext.Inventories.Any()) FillInventory(dbContext);
 
-            if (!dbContext.Transactions.Any()) AddSomeTransactions(dbContext);
+            //Uncomment the following line if you need to add some Transactions
+            //if (!dbContext.Transactions.Any()) AddSomeTransactions(dbContext);
         }
 
         #endregion
@@ -31,8 +32,8 @@ namespace EquipmentRental.DataAccess
         private static async Task CreateCustomers(SqlDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<Customer> userManager)
         {
             // local variables
-            DateTime createdDate = new DateTime(2016, 03, 01, 12, 30, 00);
-            DateTime lastModifiedDate = DateTime.Now;
+            var createdDate = new DateTime(2016, 03, 01, 12, 30, 00);
+            var lastModifiedDate = DateTime.Now;
             string role_Administrator = "Administrator";
             string role_RegisteredUser = "RegisteredUser";
             //Create Roles (if they doesn't exist yet)
@@ -171,57 +172,67 @@ namespace EquipmentRental.DataAccess
         private static void AddSomeTransactions(SqlDbContext dbContext)
         {
 #if DEBUG
-            var Inventories = dbContext.Inventories.ToList();
+            var inventories = dbContext.Inventories.ToList();
 
-            dbContext.Transactions.Add(new Transaction
-            {
-                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
-                EquipmentId = 1,
-                TransactionDateTime = DateTime.Now,
-                Days = 1,
-                Price = CalculatePrice(1, Inventories.FirstOrDefault(c => c.InventoryID.Equals(1)).Type),
-                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(1)).Type)
-            });
+            var inventory1 = inventories.FirstOrDefault(c => c.InventoryID.Equals(1));
+            if (inventory1 != null)
+                dbContext.Transactions.Add(new Transaction
+                {
+                    UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                    EquipmentId = 1,
+                    TransactionDateTime = DateTime.Now,
+                    Days = 1,
+                    Price = CalculatePrice(1, inventory1.Type),
+                    Points = CalculatePoints(inventory1.Type)
+                });
 
-            dbContext.Transactions.Add(new Transaction
-            {
-                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
-                EquipmentId = 2,
-                TransactionDateTime = DateTime.Now,
-                Days = 2,
-                Price = CalculatePrice(2, Inventories.FirstOrDefault(c => c.InventoryID.Equals(2)).Type),
-                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(2)).Type)
-            });
+            var inventory2 = inventories.FirstOrDefault(c => c.InventoryID.Equals(2));
+            if (inventory2 != null)
+                dbContext.Transactions.Add(new Transaction
+                {
+                    UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                    EquipmentId = 2,
+                    TransactionDateTime = DateTime.Now,
+                    Days = 2,
+                    Price = CalculatePrice(2, inventory2.Type),
+                    Points = CalculatePoints(inventory2.Type)
+                });
 
-            dbContext.Transactions.Add(new Transaction
-            {
-                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
-                EquipmentId = 3,
-                TransactionDateTime = DateTime.Now,
-                Days = 3,
-                Price = CalculatePrice(3, Inventories.FirstOrDefault(c => c.InventoryID.Equals(3)).Type),
-                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(3)).Type)
-            });
+            var inventory3 = inventories.FirstOrDefault(c => c.InventoryID.Equals(3));
+            if (inventory3 != null)
+                dbContext.Transactions.Add(new Transaction
+                {
+                    UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                    EquipmentId = 3,
+                    TransactionDateTime = DateTime.Now,
+                    Days = 3,
+                    Price = CalculatePrice(3, inventory3.Type),
+                    Points = CalculatePoints(inventory3.Type)
+                });
 
-            dbContext.Transactions.Add(new Transaction
-            {
-                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
-                EquipmentId = 4,
-                TransactionDateTime = DateTime.Now,
-                Days = 4,
-                Price = CalculatePrice(4, Inventories.FirstOrDefault(c => c.InventoryID.Equals(4)).Type),
-                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(4)).Type)
-            });
+            var inventory4 = inventories.FirstOrDefault(c => c.InventoryID.Equals(4));
+            if (inventory4 != null)
+                dbContext.Transactions.Add(new Transaction
+                {
+                    UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                    EquipmentId = 4,
+                    TransactionDateTime = DateTime.Now,
+                    Days = 4,
+                    Price = CalculatePrice(4, inventory4.Type),
+                    Points = CalculatePoints(inventory4.Type)
+                });
 
-            dbContext.Transactions.Add(new Transaction
-            {
-                UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
-                EquipmentId = 5,
-                TransactionDateTime = DateTime.Now,
-                Days = 5,
-                Price = CalculatePrice(5, Inventories.FirstOrDefault(c => c.InventoryID.Equals(5)).Type),
-                Points = CalculatePoints(Inventories.FirstOrDefault(c => c.InventoryID.Equals(5)).Type)
-            });
+            var inventory5 = inventories.FirstOrDefault(c => c.InventoryID.Equals(5));
+            if (inventory5 != null)
+                dbContext.Transactions.Add(new Transaction
+                {
+                    UserId = "042f780d-8b17-42f3-8c73-486d63f87e98",
+                    EquipmentId = 5,
+                    TransactionDateTime = DateTime.Now,
+                    Days = 5,
+                    Price = CalculatePrice(5, inventory5.Type),
+                    Points = CalculatePoints(inventory5.Type)
+                });
 
             // persist the changes on the Database
             dbContext.SaveChanges();
