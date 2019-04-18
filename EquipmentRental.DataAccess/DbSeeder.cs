@@ -136,31 +136,31 @@ namespace EquipmentRental.DataAccess
             dbContext.Inventories.Add(new Inventory
             {
                 Name = "Caterpillar bulldozer",
-                Type = Domain.Enums.EquipmentType.Heavy
+                Type = EquipmentType.Heavy
             });
 
             dbContext.Inventories.Add(new Inventory
             {
                 Name = "KamAZ truck",
-                Type = Domain.Enums.EquipmentType.Regular
+                Type = EquipmentType.Regular
             });
 
             dbContext.Inventories.Add(new Inventory
             {
                 Name = "Komatsu crane",
-                Type = Domain.Enums.EquipmentType.Heavy
+                Type =EquipmentType.Heavy
             });
 
             dbContext.Inventories.Add(new Inventory
             {
                 Name = "Volvo steamroller",
-                Type = Domain.Enums.EquipmentType.Regular
+                Type = EquipmentType.Regular
             });
 
             dbContext.Inventories.Add(new Inventory
             {
                 Name = "Bosch jackhammer",
-                Type = Domain.Enums.EquipmentType.Specialized
+                Type = EquipmentType.Specialized
             });
 
             // persist the changes on the Database

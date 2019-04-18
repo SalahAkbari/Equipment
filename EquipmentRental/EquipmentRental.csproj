@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\equipments\ITransaction.ts" />
+    <None Remove="ClientApp\src\app\invoice\Invoice.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\equipments\ITransaction.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\invoice\Invoice.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

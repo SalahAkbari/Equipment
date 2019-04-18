@@ -1,0 +1,11 @@
+div.double {
+  border-style: double;
+}
+
+h1.center{
+  text-align: center
+}
+
+p.left {
+  margin: 10px;
+}

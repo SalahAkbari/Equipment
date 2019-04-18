@@ -1,5 +1,6 @@
 interface ITransaction {
   days: number;
-  equipmentId: string;
-  type: number;
+  equipmentId: number;
+  type: string;
+  equipmentName: string;
 }

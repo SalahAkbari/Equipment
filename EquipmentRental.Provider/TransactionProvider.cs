@@ -6,8 +6,10 @@ using AutoMapper;
 using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.DTOs;
 using EquipmentRental.Domain.Entities;
+using EquipmentRental.Domain.Enums;
 using EquipmentRental.Provider;
 using EquipmentRental.Provider.Utilities;
+using EquipmentRental.Provider.ViewModels;
 
 namespace CustomerInquiry.Provider
 {
@@ -20,13 +22,40 @@ namespace CustomerInquiry.Provider
             _rep = rep;
         }
 
-        public async Task<IEnumerable<TransactionDTo>> GetAllTransactions(string customerId)
+        public async Task<Invoice> GetAllTransactions(string customerId, IInventoryProvider inventoryProvider)
         {
             try
             {
                 var item = (await _rep.Get()).Where(b => b.UserId.Equals(customerId));
+                var inventories = await inventoryProvider.GetAllInventories();
                 var dtOs = Mapper.Map<IEnumerable<TransactionDTo>>(item);
-                return dtOs;
+
+                var result = from transaction in dtOs
+                             join inventory in inventories on transaction.EquipmentId equals inventory.InventoryID
+                             select new TransactionDTo
+                             {
+                                 Days = transaction.Days,
+                                 Points = transaction.Points,
+                                 Price = transaction.Price,
+                                 TransactionDateTime = transaction.TransactionDateTime,
+                                 Type = inventory.Type,
+                                 EquipmentName = inventory.Name
+                             };
+
+                //Since this is just for demonstration purposes and we have just a single user
+                //in the system we have returned "Admin" as the customer's name (See the Invoice.CustomerName property)
+                //However in a real production we can retrieve the Customer's name from User's table like below 
+
+                //var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //var customer = await _appDbContext.Users.SingleOrDefaultAsync(c => c.Id == userId);
+
+                Invoice invoice = new Invoice
+                {
+                    Transactions = result,
+                    TotalPoints = dtOs.Sum(c => c.Points),
+                    TotalPrice = dtOs.Sum(c => c.Price)
+                };
+                return invoice;
             }
             catch (Exception e)
             {
@@ -57,8 +86,9 @@ namespace CustomerInquiry.Provider
         {
             try
             {
-                transaction.Points = Helper.CalculatePoints(transaction.Type);
-                transaction.Price = Helper.CalculatePrice(transaction.Days, transaction.Type);
+                Enum.TryParse(transaction.Type, out EquipmentType equipmentType);
+                transaction.Points = Helper.CalculatePoints(equipmentType);
+                transaction.Price = Helper.CalculatePrice(transaction.Days, equipmentType);
                 transaction.TransactionDateTime = DateTime.Now.ToString();
                 var itemToCreate = Mapper.Map<Transaction>(transaction);
                 itemToCreate.UserId = customerId;

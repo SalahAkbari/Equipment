@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-equipments',
@@ -9,9 +10,11 @@ import { HttpClient } from '@angular/common/http';
 export class EquipmentsComponent {
   public inventories: IInventory[];
   form: FormGroup;
+  transaction = <ITransaction>{};
+
   customerId: string = "042f780d-8b17-42f3-8c73-486d63f87e98";
 
-  constructor(private fb: FormBuilder, private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
     this.createForm();
     http.get<IInventory[]>(baseUrl + 'api/inventories').subscribe(result => {
       this.inventories = result;
@@ -20,27 +23,25 @@ export class EquipmentsComponent {
 
   createForm() {
     this.form = this.fb.group({
-      EquipmentId: ['', Validators.required],
-      Days: ['', Validators.required],
-      EquipmentType: ['', Validators.required]
+      
+      Days: ['', Validators.required]
+     
     });
   }
 
   onSubmit() {
     // build a temporary user object from form values
-    var transaction = <ITransaction>{};
-    transaction.days = this.form.value.Days;
-    transaction.equipmentId = this.form.value.EquipmentId;
-    transaction.type = this.form.value.EquipmentType;
+    this.transaction.days = this.form.value.Days;
+    //this.transaction.equipmentId = this.form.value.EquipmentId;
+    //this.transaction.type = this.form.value.EquipmentType;
     
     var url = this.baseUrl + "api/transactions/" + this.customerId + "/transaction";
-    this.http.post<ITransaction>(url, transaction)
+    this.http.post<ITransaction>(url, this.transaction)
       .subscribe(res => {
         if (res) {
           var v = res;
-          alert("Transaction " + v.equipmentId + " has been created.");
-          // redirect to login page
-          //this.router.navigate(["login"]);
+          // redirect to Invoice page
+          this.router.navigate(["invoice"]);
         }
         else {
           // registration failed
@@ -51,7 +52,14 @@ export class EquipmentsComponent {
       }, error => console.log(error));
   }
   onBack() {
-    //this.router.navigate([""]);
+    this.router.navigate([""]);
+  }
+
+  onSelect(inventory: IInventory) {
+    this.transaction.equipmentId = inventory.inventoryID;
+    this.transaction.type = inventory.type;
+
+    alert('You choosed one item, please Enter the number of days below');
   }
 
   // retrieve a FormControl

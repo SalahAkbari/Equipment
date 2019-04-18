@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.DTOs;
-using EquipmentRental.Domain.Entities;
 using EquipmentRental.Provider;
 using EquipmentRental.Provider.Utilities;
+using EquipmentRental.Provider.ViewModels;
 
 namespace EquipmentRental.Test
 {
@@ -38,12 +36,18 @@ namespace EquipmentRental.Test
             }
         }
 
-        public async Task<IEnumerable<TransactionDTo>> GetAllTransactions(string customerId)
+        public async Task<Invoice> GetAllTransactions(string customerId)
         {
             try
             {
                 var items = (await _rep.Get()).Where(b => b.UserId.Equals(customerId));
-                return items;
+                Invoice invoice = new Invoice
+                {
+                    Transactions = items,
+                    TotalPoints = items.Sum(c => c.Points),
+                    TotalPrice = items.Sum(c => c.Price)
+                };
+                return invoice;
             }
             catch (Exception e)
             {

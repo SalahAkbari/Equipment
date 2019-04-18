@@ -19,6 +19,7 @@ namespace EquipmentRental.Domain.DTOs
         public int Points { get; set; }
 
         public int Days { get; set; }
-        public EquipmentType Type { get; set; }
+        public string Type { get; set; }
+        public string EquipmentName { get; set; }
     }
 }

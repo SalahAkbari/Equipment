@@ -8,10 +8,12 @@ namespace EquipmentRental.Controllers
     [Route("api/transactions")]
     public class TransactionController : Controller
     {
-        private readonly ITransactionProvider _provider;
-        public TransactionController(ITransactionProvider provider)
+        private readonly ITransactionProvider _transactionProvider;
+        private readonly IInventoryProvider _inventoryProvider;
+        public TransactionController(ITransactionProvider transactionProvider, IInventoryProvider inventoryProvider)
         {
-            _provider = provider;
+            _transactionProvider = transactionProvider;
+            _inventoryProvider = inventoryProvider;
         }
 
         //You might wonder why the ids are sent in as separate parameters as opposed to 
@@ -24,7 +26,7 @@ namespace EquipmentRental.Controllers
         {
             if (dto == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var result = _provider.AddTransaction(customerId, dto);
+            var result = _transactionProvider.AddTransaction(customerId, dto);
             if (result == null) return StatusCode(500, "A problem occurred while handling your request.");
             return CreatedAtRoute("GetTransaction", new { id = result.TransactionID }, result);
         }
@@ -33,15 +35,15 @@ namespace EquipmentRental.Controllers
         public async Task<IActionResult> Get(string customerId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var dtOs = await _provider.GetAllTransactions(customerId);
-            return Ok(dtOs);
+            var invoice = await _transactionProvider.GetAllTransactions(customerId, _inventoryProvider);
+            return Ok(invoice);
         }
 
         [HttpGet("{customerId}/transaction/{id}", Name = "GetTransaction")]
         public async Task<IActionResult> Get(string customerId, int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var item = await _provider.GetTransaction(customerId, id);
+            var item = await _transactionProvider.GetTransaction(customerId, id);
             if (item == null) return NotFound();//404 Not Found (Client Error Status Code)
             return Ok(item);//Get Successfull (Success Status Code)
         }

@@ -10,6 +10,6 @@ namespace EquipmentRental.Domain.DTOs
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public EquipmentType Type { get; set; }
+        public string Type { get; set; }
     }
 }

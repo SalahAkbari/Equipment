@@ -9,6 +9,7 @@
       <th>InventoryID</th>
       <th>Name</th>
       <th>Type</th>
+      <th>Choose</th>
     </tr>
   </thead>
   <tbody>
@@ -16,13 +17,14 @@
       <td>{{ inventory.inventoryID }}</td>
       <td>{{ inventory.name }}</td>
       <td>{{ inventory.type }}</td>
+      <td><button (click)="onSelect(inventory)">Choose..</button></td>
     </tr>
   </tbody>
 </table>
 
 <hr />
 
-<div class="login-container">
+<div class="login-container" *ngIf="inventories">
   <h2 class="login-title">Please Enter the Days...</h2>
   <form [formGroup]="form"
         (ngSubmit)="onSubmit()"
@@ -32,19 +34,6 @@
       {{form.errors.register}}
     </div>-->
 
-    <div class="form-group" [ngClass]="{ 'has-error has-feedback' : hasError('EquipmentId') }">
-      <input type="text" required autofocus
-             formControlName="EquipmentId"
-             class="form-control"
-             placeholder="Insert EquipmentId..." />
-      <span *ngIf="hasError('EquipmentId')"
-            class="glyphicon glyphicon-remove form-control-feedback"
-            aria-hidden="true"></span>
-      <div *ngIf="hasError('EquipmentId')"
-           class="help-block">
-        Please insert a valid EquipmentId.
-      </div>
-    </div>
 
     <div class="form-group"
          [ngClass]="{ 'has-error has-feedback' : hasError('Days') }">
@@ -57,24 +46,9 @@
             aria-hidden="true"></span>
       <div *ngIf="hasError('Days')"
            class="help-block">
-        Please insert a valid Days.
+        Please enter the number of days for how long you wish to rent the chosen machine.
       </div>
     </div>
-
-    <div class="form-group"
-       [ngClass]="{ 'has-error has-feedback' : hasError('EquipmentType') }">
-    <input type="text" required
-           formControlName="EquipmentType"
-           class="form-control"
-           placeholder="Insert EquipmentType..." />
-    <span *ngIf="hasError('EquipmentType')"
-          class="glyphicon glyphicon-remove form-control-feedback"
-          aria-hidden="true"></span>
-    <div *ngIf="hasError('EquipmentType')"
-         class="help-block">
-      Please insert a valid EquipmentType.
-    </div>
-  </div>
 
 
     <div class="text-center">
