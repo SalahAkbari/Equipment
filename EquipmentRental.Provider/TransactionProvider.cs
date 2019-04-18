@@ -10,24 +10,30 @@ using EquipmentRental.Domain.Enums;
 using EquipmentRental.Provider;
 using EquipmentRental.Provider.Utilities;
 using EquipmentRental.Provider.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace CustomerInquiry.Provider
 {
     public class TransactionProvider : ITransactionProvider
     {
-        readonly IGenericEfRepository<Transaction> _rep;
+        private readonly ILogger<TransactionProvider> _logger;
 
-        public TransactionProvider(IGenericEfRepository<Transaction> rep)
+        readonly IGenericEfRepository<Transaction> _rep;
+        IInventoryProvider _inventoryProvider;
+
+        public TransactionProvider(IGenericEfRepository<Transaction> rep, ILogger<TransactionProvider> logger, IInventoryProvider inventoryProvider)
         {
             _rep = rep;
+            _logger = logger;
+            _inventoryProvider = inventoryProvider;
         }
 
-        public async Task<Invoice> GetAllTransactions(string customerId, IInventoryProvider inventoryProvider)
+        public async Task<Invoice> GetAllTransactions(string customerId)
         {
             try
             {
                 var item = (await _rep.Get()).Where(b => b.UserId.Equals(customerId));
-                var inventories = await inventoryProvider.GetAllInventories();
+                var inventories = await _inventoryProvider.GetAllInventories();
                 var dtOs = Mapper.Map<IEnumerable<TransactionDTo>>(item);
 
                 var result = from transaction in dtOs
@@ -59,7 +65,7 @@ namespace CustomerInquiry.Provider
             }
             catch (Exception e)
             {
-                //Logger.ErrorException(e.Message, e);
+                _logger.LogInformation(e.Message);
                 throw e;
             }
         }
@@ -77,7 +83,7 @@ namespace CustomerInquiry.Provider
             }
             catch (Exception e)
             {
-                //Logger.ErrorException(e.Message, e);
+                _logger.LogInformation(e.Message);
                 throw;
             }
         }
@@ -99,7 +105,7 @@ namespace CustomerInquiry.Provider
             }
             catch (Exception e)
             {
-                //Logger.ErrorException(e.Message, e);
+                _logger.LogInformation(e.Message);
                 throw e;
             }
         }
@@ -118,7 +124,7 @@ namespace CustomerInquiry.Provider
             }
             catch (Exception e)
             {
-                //Logger.ErrorException(e.Message, e);
+                _logger.LogInformation(e.Message);
                 throw;
             }
         }

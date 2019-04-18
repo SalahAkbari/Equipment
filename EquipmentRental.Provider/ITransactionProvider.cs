@@ -6,7 +6,7 @@ namespace EquipmentRental.Provider
 {
     public interface ITransactionProvider
     {
-        Task<Invoice> GetAllTransactions(string customerId, IInventoryProvider inventoryProvider);
+        Task<Invoice> GetAllTransactions(string customerId);
         Task<TransactionDTo> GetTransaction(string customerId, int id);
         TransactionDTo AddTransaction(string customerId, TransactionDTo transaction);
         Task<bool?> DeleteTransactions();

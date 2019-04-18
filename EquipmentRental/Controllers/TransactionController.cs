@@ -11,11 +11,9 @@ namespace EquipmentRental.Controllers
     public class TransactionController : Controller
     {
         private readonly ITransactionProvider _transactionProvider;
-        private readonly IInventoryProvider _inventoryProvider;
-        public TransactionController(ITransactionProvider transactionProvider, IInventoryProvider inventoryProvider)
+        public TransactionController(ITransactionProvider transactionProvider)
         {
             _transactionProvider = transactionProvider;
-            _inventoryProvider = inventoryProvider;
         }
 
         //You might wonder why the ids are sent in as separate parameters as opposed to 
@@ -37,7 +35,7 @@ namespace EquipmentRental.Controllers
         public async Task<IActionResult> Get(string customerId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var invoice = await _transactionProvider.GetAllTransactions(customerId, _inventoryProvider);
+            var invoice = await _transactionProvider.GetAllTransactions(customerId);
             return Ok(invoice);
         }
 

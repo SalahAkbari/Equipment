@@ -5,16 +5,20 @@ using AutoMapper;
 using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.DTOs;
 using EquipmentRental.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace EquipmentRental.Provider
 {
     public class InventoryProvider : IInventoryProvider
     {
         readonly IGenericEfRepository<Inventory> _rep;
+        private readonly ILogger<InventoryProvider> _logger;
 
-        public InventoryProvider(IGenericEfRepository<Inventory> rep)
+
+        public InventoryProvider(IGenericEfRepository<Inventory> rep, ILogger<InventoryProvider> logger)
         {
             _rep = rep;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<InventoryDto>> GetAllInventories()
@@ -27,7 +31,7 @@ namespace EquipmentRental.Provider
             }
             catch (Exception e)
             {
-                //Logger.ErrorException(e.Message, e);
+                _logger.LogInformation(e.Message);
                 throw e;
             }
         }

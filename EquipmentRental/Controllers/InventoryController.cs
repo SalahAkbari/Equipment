@@ -1,5 +1,6 @@
 ﻿using EquipmentRental.Provider;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace EquipmentRental.Controllers
@@ -8,6 +9,7 @@ namespace EquipmentRental.Controllers
     public class InventoryController : Controller
     {
         private readonly IInventoryProvider _provider;
+
         public InventoryController(IInventoryProvider provider)
         {
             _provider = provider;

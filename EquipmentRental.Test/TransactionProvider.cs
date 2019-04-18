@@ -39,7 +39,7 @@ namespace EquipmentRental.Test
             }
         }
 
-        public async Task<Invoice> GetAllTransactions(string customerId, IInventoryProvider inventoryProvider)
+        public async Task<Invoice> GetAllTransactions(string customerId)
         {
             try
             {
@@ -72,6 +72,11 @@ namespace EquipmentRental.Test
                 //Logger.ErrorException(e.Message, e);
                 throw;
             }
+        }
+
+        public Task<bool?> DeleteTransactions()
+        {
+            throw new NotImplementedException();
         }
     }
 }

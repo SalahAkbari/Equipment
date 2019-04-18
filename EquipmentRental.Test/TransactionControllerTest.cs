@@ -23,7 +23,7 @@ namespace EquipmentRental.Test
             _mockRepo = new Mock<IGenericEfRepository<TransactionDTo>>();
             ITransactionProvider provider = new TransactionProvider(_mockRepo.Object);
 
-            _controller = new TransactionController(provider, null);
+            _controller = new TransactionController(provider);
 
             _mockRepo.Setup(m => m.Get())
                 .Returns(Task.FromResult(MockData.Current.Transactions.AsEnumerable()));
