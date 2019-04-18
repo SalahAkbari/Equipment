@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -8,6 +7,8 @@ using EquipmentRental.Controllers;
 using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.DTOs;
 using EquipmentRental.Provider;
+using EquipmentRental.Provider.ViewModels;
+using EquipmentRental.Domain.Enums;
 
 namespace EquipmentRental.Test
 {
@@ -21,7 +22,8 @@ namespace EquipmentRental.Test
         {
             _mockRepo = new Mock<IGenericEfRepository<TransactionDTo>>();
             ITransactionProvider provider = new TransactionProvider(_mockRepo.Object);
-            _controller = new TransactionController(provider);
+
+            _controller = new TransactionController(provider, null);
 
             _mockRepo.Setup(m => m.Get())
                 .Returns(Task.FromResult(MockData.Current.Transactions.AsEnumerable()));
@@ -32,6 +34,13 @@ namespace EquipmentRental.Test
             _mockRepo.Setup(x => x.Get(It.Is<int>(y => y == transactionId)))
                 .Returns(Task.FromResult(MockData.Current.Transactions
                     .FirstOrDefault(p => p.TransactionID.Equals(transactionId))));
+        }
+
+        private void MoqSetupAdd(TransactionDTo testItem)
+        {
+            _mockRepo.Setup(x => x.Add(It.Is<TransactionDTo>(y => y == testItem)))
+                .Callback<TransactionDTo>(s => MockData.Current.Transactions.Add(s));
+            _mockRepo.Setup(x => x.Save()).Returns(true);
         }
 
 
@@ -57,8 +66,8 @@ namespace EquipmentRental.Test
             var okResult = await _controller.Get(testCustomerId) as OkObjectResult;
 
             // Assert
-            var items = Assert.IsType<List<TransactionDTo>>(okResult?.Value);
-            Assert.Equal(5, items.Count);
+            var items = Assert.IsType<Invoice>(okResult?.Value);
+            Assert.Equal(5, items.Transactions.Count());
         }
 
         [Fact]
@@ -109,6 +118,104 @@ namespace EquipmentRental.Test
             // Assert
             Assert.IsType<TransactionDTo>(okResult?.Value);
             Assert.Equal(expectedPrice, ((TransactionDTo)okResult.Value).Price);
+        }
+
+        [Fact]
+        public void Add_NullObjectPassed_ReturnsBadRequest()
+        {
+            //Arrange
+            //ids should be passed into the action with the URL as opposed to 
+            //sending them with the request body to follow the REST standard.
+            const string testCustomerId = "042f780d-8b17-42f3-8c73-486d63f87e98";
+
+            // Act
+            var badResponse = _controller.Post(testCustomerId, null);
+
+            // Assert
+            Assert.IsType<BadRequestResult>(badResponse);
+        }
+
+        [Fact]
+        public void Add_MissingObjectDaysPassed_ReturnsBadRequest()
+        {
+            // Arrange
+
+            const string testCustomerId = "042f780d-8b17-42f3-8c73-486d63f87e98";
+
+            var testItem = new TransactionDTo()
+            {
+                TransactionID = 6,
+                EquipmentId = 1,
+                Type = EquipmentType.Heavy.ToString()
+            };
+
+            MoqSetupAdd(testItem);
+
+            // Act
+
+            //See how the ValidateViewModel extension method in the Helper class is useful here
+            _controller.ValidateViewModel(testItem);
+            //I have used the above useful extension method to simulate validation instead of adding customly like below
+            //_controller.ModelState.AddModelError("CustomerName", "Required");
+
+            var badResponse = _controller.Post(testCustomerId, testItem);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(badResponse);
+        }
+
+        [Fact]
+        public void Add_ValidObjectPassed_ReturnsCreatedAtRouteResult()
+        {
+            // Arrange
+
+            const string testCustomerId = "042f780d-8b17-42f3-8c73-486d63f87e98";
+
+            var testItem = new TransactionDTo()
+            {
+                TransactionID = 6,
+                Days = 1,
+                EquipmentId = 1,
+                Type = EquipmentType.Heavy.ToString()
+            };
+
+            MoqSetupAdd(testItem);
+
+            // Act
+            _controller.ValidateViewModel(testItem);
+            var createdResponse = _controller.Post(testCustomerId, testItem);
+
+            // Assert
+            Assert.IsType<CreatedAtRouteResult>(createdResponse);
+        }
+
+        [Fact]
+        public void Add_ValidObjectPassed_ReturnedRightPriceAndPoints()
+        {
+            // Arrange
+
+            const string testCustomerId = "042f780d-8b17-42f3-8c73-486d63f87e98";
+
+            var testItem = new TransactionDTo()
+            {
+                TransactionID = 6,
+                Days = 1,
+                EquipmentId = 1,
+                Type = EquipmentType.Heavy.ToString()
+            };
+
+            MoqSetupAdd(testItem);
+
+            // Act
+            _controller.ValidateViewModel(testItem);
+
+            var createdResponse = _controller.Post(testCustomerId, testItem) as CreatedAtRouteResult;
+            var item = createdResponse?.Value as TransactionDTo;
+
+            // Assert
+            Assert.IsType<TransactionDTo>(item);
+            Assert.Equal(2, item.Points);
+            Assert.Equal(160, item.Price);
         }
     }
 }

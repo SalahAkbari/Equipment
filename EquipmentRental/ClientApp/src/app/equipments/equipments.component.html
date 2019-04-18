@@ -24,16 +24,11 @@
 
 <hr />
 
-<div class="login-container" *ngIf="inventories">
-  <h2 class="login-title">Please Enter the Days...</h2>
+<div *ngIf="inventories">
+  <h2>Please Enter the Days...</h2>
   <form [formGroup]="form"
         (ngSubmit)="onSubmit()"
         class="login-form">
-    <!--<div *ngIf="form.errors?.auth"
-         class="error-panel help-block">
-      {{form.errors.register}}
-    </div>-->
-
 
     <div class="form-group"
          [ngClass]="{ 'has-error has-feedback' : hasError('Days') }">
@@ -53,7 +48,7 @@
 
     <div class="text-center">
       <button type="submit"
-              [disabled]="form.invalid"
+              [disabled]="form.invalid || !this.transaction.equipmentId"
               class="btn btn-md btn-success btn-signin">
         Add to Cart
       </button>

@@ -17,7 +17,7 @@ namespace EquipmentRental.Domain.DTOs
         public decimal Price { get; set; }
 
         public int Points { get; set; }
-
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
         public int Days { get; set; }
         public string Type { get; set; }
         public string EquipmentName { get; set; }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.DTOs;
+using EquipmentRental.Domain.Enums;
 using EquipmentRental.Provider;
 using EquipmentRental.Provider.Utilities;
 using EquipmentRental.Provider.ViewModels;
@@ -22,8 +23,10 @@ namespace EquipmentRental.Test
         {
             try
             {
-                transaction.Points = Helper.CalculatePoints(transaction.Type);
-                transaction.Price = Helper.CalculatePrice(transaction.Days, transaction.Type);
+                Enum.TryParse(transaction.Type, out EquipmentType equipmentType);
+                transaction.Points = Helper.CalculatePoints(equipmentType);
+                transaction.Price = Helper.CalculatePrice(transaction.Days, equipmentType);
+                transaction.TransactionDateTime = DateTime.Now.ToString();
                 transaction.UserId = customerId;
                 _rep.Add(transaction);
                 if (!_rep.Save()) return null;
@@ -36,7 +39,7 @@ namespace EquipmentRental.Test
             }
         }
 
-        public async Task<Invoice> GetAllTransactions(string customerId)
+        public async Task<Invoice> GetAllTransactions(string customerId, IInventoryProvider inventoryProvider)
         {
             try
             {
