@@ -1,5 +1,7 @@
 ﻿using EquipmentRental.Domain.DTOs;
 using EquipmentRental.Provider;
+using EquipmentRental.Provider.Utilities;
+using EquipmentRental.Provider.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -46,6 +48,15 @@ namespace EquipmentRental.Controllers
             var item = await _transactionProvider.GetTransaction(customerId, id);
             if (item == null) return NotFound();//404 Not Found (Client Error Status Code)
             return Ok(item);//Get Successfull (Success Status Code)
+        }
+
+        [HttpPost("saveInvoice")]
+        public IActionResult Post([FromBody]Invoice invoice)
+        {
+            if (invoice == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            invoice.SaveToTxt();
+            return Ok(invoice);
         }
     }
 }

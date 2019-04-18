@@ -120,6 +120,21 @@ namespace EquipmentRental.Test
             Assert.Equal(expectedPrice, ((TransactionDTo)okResult.Value).Price);
         }
 
+        [Fact]//Based on MockData.Current.Transactions
+        public async Task GetInvoice_WhenCalled_ReturnedRightTotalPriceAndPoints()
+        {
+            // Arrange
+            const string testCustomerId = "042f780d-8b17-42f3-8c73-486d63f87e98";
+            // Act
+            var okResult = await _controller.Get(testCustomerId) as OkObjectResult;
+
+            var item = okResult?.Value as Invoice;
+
+            // Assert
+            Assert.Equal(7, item.TotalPoints);
+            Assert.Equal(1180, item.TotalPrice);
+        }
+
         [Fact]
         public void Add_NullObjectPassed_ReturnsBadRequest()
         {

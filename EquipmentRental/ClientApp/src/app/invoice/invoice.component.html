@@ -1,9 +1,12 @@
 <h1 class="center">Invoice</h1>
 
 <div class="double">
-<p class="left">Customer Name: {{invoice.customerName}}</p> 
-<p class="left">Total Points: {{invoice.totalPoints}}</p> 
-<p class="left">Total Price: {{invoice.totalPrice}}</p>
+  <p class="left">Customer Name: {{invoice.customerName}}</p>
+  <p class="left">Total Points: {{invoice.totalPoints}}</p>
+  <p class="left">Total Price: {{invoice.totalPrice}}</p>
+  <button type="submit" (click)="onSave()" class="btn btn-md btn-success btn-signin">
+    Save To a Text File
+  </button>
 </div>
 
 <br />

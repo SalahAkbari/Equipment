@@ -1,6 +1,9 @@
 ﻿using EquipmentRental.DataAccess;
 using EquipmentRental.Domain.Enums;
+using EquipmentRental.Provider.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace EquipmentRental.Provider.Utilities
 {
@@ -27,6 +30,21 @@ namespace EquipmentRental.Provider.Utilities
             dictionary.TryGetValue((int)equipmentType, out value);
 
             return value;
+        }
+
+        public static void SaveToTxt(this Invoice invoice)
+        {
+            using (TextWriter tw = new StreamWriter($"C:\\Invoices\\invoice_ {DateTime.Now.ToString("yyyyMMddHHmmssfff")}.txt"))
+            {
+                tw.WriteLine($"Customer Name: {invoice.CustomerName} - Total Points: {invoice.TotalPoints}" +
+                    $" - Total Price: {invoice.TotalPrice}" 
+                    + Environment.NewLine + "---------------------------------------------------------------------------");
+
+                foreach (var item in invoice.Transactions)
+                {
+                    tw.WriteLine($"Equipment Name: {item.EquipmentName} - Type: {item.Type} - Days: {item.Days} - Price: {item.Price} - TransactionDateTime: {item.TransactionDateTime}");
+                }
+            }
         }
     }
 }

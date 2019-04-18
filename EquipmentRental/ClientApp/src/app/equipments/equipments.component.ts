@@ -30,10 +30,8 @@ export class EquipmentsComponent {
   }
 
   onSubmit() {
-    // build a temporary user object from form values
+
     this.transaction.days = this.form.value.Days;
-    //this.transaction.equipmentId = this.form.value.EquipmentId;
-    //this.transaction.type = this.form.value.EquipmentType;
     
     var url = this.baseUrl + "api/transactions/" + this.customerId + "/transaction";
     this.http.post<ITransaction>(url, this.transaction)

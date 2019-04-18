@@ -19,4 +19,14 @@ export class InvoiceComponent {
     }, error => console.error(error));
   }
 
+  onSave() {
+
+    var url = this.baseUrl + "api/transactions/saveInvoice";
+    this.http.post(url, this.invoice)
+      .subscribe(res => {
+        alert('The invoice stored as a text file and can be found here C:\\Invoices');
+          this.router.navigate([""]);
+      }, error => console.log(error));
+  }
+
 }
