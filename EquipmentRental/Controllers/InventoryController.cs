@@ -14,6 +14,18 @@ namespace EquipmentRental.Controllers
             _provider = provider;
         }
 
+        /// <summary>
+        /// Get all Equipments.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /
+        ///
+        /// </remarks>
+        /// <returns code="200">A list of Inventories</returns>
+        /// <response code="500">If the ModelState is invalid</response> 
+        
         [HttpGet]
         public async Task<IActionResult> GetInventories()
         {

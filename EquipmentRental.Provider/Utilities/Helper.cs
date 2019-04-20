@@ -34,7 +34,11 @@ namespace EquipmentRental.Provider.Utilities
 
         public static void SaveToTxt(this Invoice invoice)
         {
-            using (TextWriter tw = new StreamWriter($"C:\\Invoices\\invoice_ {DateTime.Now.ToString("yyyyMMddHHmmssfff")}.txt"))
+            string filePath = $"C:\\Invoices\\invoice_ {DateTime.Now.ToString("yyyyMMddHHmmssfff")}.txt";
+            FileInfo file = new FileInfo(filePath);
+            file.Directory.Create();
+
+            using (TextWriter tw = new StreamWriter(filePath))
             {
                 tw.WriteLine($"Customer Name: {invoice.CustomerName} - Total Points: {invoice.TotalPoints}" +
                     $" - Total Price: {invoice.TotalPrice}" 
